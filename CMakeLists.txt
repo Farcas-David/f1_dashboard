@@ -15,6 +15,8 @@ add_executable(f1_dashboard
         src/models.h
         src/parser.cpp
         src/parser.h
+        src/database.cpp
+        src/database.h
 )
 
 target_link_libraries(f1_dashboard
