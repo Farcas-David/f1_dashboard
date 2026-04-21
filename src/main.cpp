@@ -2,23 +2,20 @@
 #include "fetcher.h"
 #include "parser.h"
 #include "database.h"
+#include "dashboard.h"
 
 int main() {
-    std::string response=httpGet("https://api.openf1.org/v1/drivers?session_key=latest");
-    std::vector<Driver> drivers=parseDrivers(response);
+    std::cout << "Fetching F1 data..." << std::endl;
+
+    std::string response = httpGet("https://api.openf1.org/v1/drivers?session_key=latest");
+    std::vector<Driver> drivers = parseDrivers(response);
 
     Database db("f1.db");
     db.createTables();
     db.insertDrivers(drivers);
 
-    std::vector<Driver> fromDb=db.getDrivers();
-
-    std::cout<<"Drivers from database:"<<std::endl;
-    for (const auto& d : fromDb) {
-        std::cout<<d.number<<" | "<<d.code<<" | "
-                 <<d.firstName<<" "<< d.lastName
-                 <<" | "<<d.team<<std::endl;
-    }
+    std::vector<Driver> fromDb = db.getDrivers();
+    runDashboard(fromDb);
 
     return 0;
 }
